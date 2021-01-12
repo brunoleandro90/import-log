@@ -47,7 +47,8 @@ namespace ImportLog.Data.Mappings
 
             builder.HasOne<Batch>(s => s.Batch)
             .WithMany(g => g.Logs)
-            .HasForeignKey(s => s.BatchId);
+            .HasForeignKey(s => s.BatchId)
+            .IsRequired(false);
 
             builder.ToTable("Logs");
         }

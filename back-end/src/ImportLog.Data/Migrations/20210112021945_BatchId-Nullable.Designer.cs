@@ -3,15 +3,17 @@ using System;
 using ImportLog.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ImportLog.Data.Migrations
 {
     [DbContext(typeof(ImportLogDbContext))]
-    partial class ImportLogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210112021945_BatchId-Nullable")]
+    partial class BatchIdNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

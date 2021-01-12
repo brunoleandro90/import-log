@@ -13,7 +13,7 @@ namespace ImportLog.Business.Models
         public long Length { get; set; }
         public string Referer { get; set; }
         public string UserAgent { get; set; }
-        public Guid BatchId { get; set; }
+        public Guid? BatchId { get; set; }
         public virtual Batch Batch{ get; set; }
     }
 }
