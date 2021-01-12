@@ -8,7 +8,10 @@
         <input formControlName="ip" matInput placeholder="IP">
       </mat-form-field>
       <mat-form-field class="pl5 pr5">
-        <input formControlName="date" matInput placeholder="Data e hora">
+        <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Data e hora">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <!-- <input formControlName="date" matInput placeholder="Data e hora"> -->
       </mat-form-field>
       <mat-form-field class="pr5">
         <input formControlName="method" matInput placeholder="Método">
