@@ -43,9 +43,9 @@ namespace ImportLog.Business.Services
             {
                 batch.FileAsBase64 = batch.FileAsBase64.Substring(batch.FileAsBase64.IndexOf(",") + 1);
             }
-            await _batchRepository.Add(batch);
-
             byte[] fileAsByteArray = Convert.FromBase64String(batch.FileAsBase64);
+            batch.FileAsBase64 = null;
+            await _batchRepository.Add(batch);
 
             batch.NumberLogs = await ReadFileAsBase64(fileAsByteArray, batch.Id);
             await Update(batch);

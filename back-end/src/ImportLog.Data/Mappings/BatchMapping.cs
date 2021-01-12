@@ -19,7 +19,6 @@ namespace ImportLog.Data.Mappings
                 .HasColumnType("numeric");
 
             builder.Property(p => p.FileAsBase64)
-                .IsRequired()
                 .HasColumnType("varchar(5000)");
 
             builder.ToTable("Batches");
