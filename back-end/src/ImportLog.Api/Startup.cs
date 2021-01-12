@@ -1,5 +1,6 @@
 using AutoMapper;
 using ImportLog.Api.Configuration;
+using ImportLog.Api.Data;
 using ImportLog.Api.Extensions;
 using ImportLog.Data.Context;
 using Microsoft.AspNetCore.Builder;
@@ -64,6 +65,19 @@ namespace ImportLog.Api
             app.UseMvcConfiguration();
 
             app.UseSwaggerConfig(provider);
+
+            using (IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                ApplicationDbContext applicationDb = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                ImportLogDbContext importLogDb = serviceScope.ServiceProvider.GetService<ImportLogDbContext>();
+                EnsureDatabaseCreated(applicationDb, importLogDb);
+            }
+        }
+
+        public virtual void EnsureDatabaseCreated(ApplicationDbContext applicationDb, ImportLogDbContext importLogDb)
+        {
+            applicationDb.Database.Migrate();
+            importLogDb.Database.Migrate();
         }
     }
 }
