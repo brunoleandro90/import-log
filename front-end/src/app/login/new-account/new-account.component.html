@@ -1,0 +1,34 @@
+  <h2 mat-dialog-title>Novo usuário</h2>
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="newAccountForm" fxFlex>
+
+
+      <div fxFlex fxlayout="row" fxlayout.lt-md="column">
+        <div fxFlexFill>
+          <mat-form-field class="w-100">
+            <input formControlName="email" matInput placeholder="E-mail">
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlexFill>
+          <mat-form-field class="w-100">
+            <input formControlName="password" matInput type="password" placeholder="Senha">
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlexFill>
+          <mat-form-field class="w-100">
+            <input formControlName="confirmPassword" matInput type="password" placeholder="Confirme a senha">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button class="mat-raised-button" (click)="onClose()" [disabled]="wait">Cancelar</button>
+    <button class="mat-raised-button mat-primary" (click)="onSave()" [disabled]="wait">Criar conta</button>
+  </mat-dialog-actions>
