@@ -49,7 +49,7 @@ export class LoginComponent {
       maxWidth: '75vw',
       maxHeight: '75vh',
       width: '750px',
-      height: '50vh',
+      height: '60vh',
       disableClose: true
     };
     const dialogRef = this.dialog.open(NewAccountComponent, config);

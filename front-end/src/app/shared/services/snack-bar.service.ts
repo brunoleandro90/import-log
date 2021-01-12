@@ -8,7 +8,7 @@ export class SnackBarService {
 
   constructor(private snackBar: MatSnackBar) { }
 
-  open(message: string, action: string, duration: number = 4000) {
+  open(message: string, action: string, duration: number = 5000) {
     this.snackBar.open(message, action, {
       duration: duration,
     });
@@ -20,7 +20,7 @@ export class SnackBarService {
     if (fail.error) {
       for (let i = 0; i < fail.error.errors.length; i++) {
         if (errors)
-          errors += '\n';
+          errors += "\n";
         errors += fail.error.errors[i];
       }
     } else {
