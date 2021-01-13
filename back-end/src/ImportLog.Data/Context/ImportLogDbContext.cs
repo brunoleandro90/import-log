@@ -11,7 +11,10 @@ namespace ImportLog.Data.Context
 {
     public class ImportLogDbContext : DbContext
     {
-        public ImportLogDbContext(DbContextOptions<ImportLogDbContext> options) : base(options) { }
+        public ImportLogDbContext(DbContextOptions<ImportLogDbContext> options) : base(options) {
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.AutoDetectChangesEnabled = false;
+        }
 
         public DbSet<Log> Logs { get; set; }
         public DbSet<Batch> Batches { get; set; }

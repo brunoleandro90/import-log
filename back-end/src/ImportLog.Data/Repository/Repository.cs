@@ -33,7 +33,7 @@ namespace ImportLog.Data.Repository
 
         public virtual async Task<List<TEntity>> Get()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task Add(TEntity entity)
@@ -44,8 +44,6 @@ namespace ImportLog.Data.Repository
 
         public virtual async Task Add(List<TEntity> entities)
         {
-            Db.ChangeTracker.AutoDetectChangesEnabled = false;
-            Db.ChangeTracker.LazyLoadingEnabled = false;
             DbSet.AddRange(entities);
             await SaveChanges();
         }

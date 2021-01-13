@@ -15,8 +15,6 @@ namespace ImportLog.Data.Repository
 
         public async Task RemoveByBatchId(Guid batchId)
         {
-            Db.ChangeTracker.AutoDetectChangesEnabled = false;
-            Db.ChangeTracker.LazyLoadingEnabled = false;
             IEnumerable<Log> logs = DbSet.Where(x => x.BatchId == batchId);
             DbSet.RemoveRange(logs);
             await base.SaveChanges();
