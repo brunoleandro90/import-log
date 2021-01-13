@@ -45,7 +45,7 @@ namespace ImportLog.Api.Configuration
                     builder =>
                         builder
                             .WithMethods("GET")
-                            .WithOrigins("http://desenvolvedor.io")
+                            .WithOrigins("http://localhost")
                             .SetIsOriginAllowedToAllowWildcardSubdomains()
                             .AllowAnyHeader());
             });
