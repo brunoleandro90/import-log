@@ -59,7 +59,7 @@ export class LogComponent implements OnInit, AfterViewInit {
         let logObj: Log = Object.assign(result);
         this.logService.create(logObj)
           .subscribe(
-            success => { this.onSuccess(success) },
+            success => { this.onSuccess(success, false) },
             fail => { this.onError(fail) }
           );
       }
@@ -77,12 +77,11 @@ export class LogComponent implements OnInit, AfterViewInit {
         });
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            debugger;
             let logObj: Log = Object.assign(result);
             logObj.id = logEdit.id;
-            this.logService.update(logObj.id, logObj)
+            this.logService.update(logObj)
               .subscribe(
-                success => { this.onSuccess(success) },
+                success => { this.onSuccess(id, false) },
                 fail => { this.onError(fail) }
               );
           }
@@ -99,15 +98,21 @@ export class LogComponent implements OnInit, AfterViewInit {
       if (result) {
         this.logService.delete(id)
           .subscribe(
-            success => { this.onSuccess(success) },
+            success => { this.onSuccess(success, true) },
             fail => { this.onError(fail) }
           );
       }
     });
   }
 
-  private onSuccess(success: any) {
-    this.getAll();
+  private onSuccess(response: any, remove: boolean) {
+    if (remove) {
+      let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
+      this.dataSource.data.splice(index, 1);
+      this.dataSource._updateChangeSubscription();
+    } else {
+      this.getAll();
+    }
   }
 
   private onError(fail: any) {

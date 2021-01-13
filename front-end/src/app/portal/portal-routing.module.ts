@@ -18,11 +18,7 @@ const routes: Routes = [
             {
                 path: 'log',
                 loadChildren: () => import('./log/log.module').then(m => m.LogModule)
-            },
-            // {
-            //     path: 'log',
-            //     component: LogComponent
-            // }
+            }
         ]
     }
 ];

@@ -50,10 +50,6 @@ export class BatchComponent implements OnInit, AfterViewInit {
       })
   }
 
-  onClickUpload() {
-
-  }
-
   onDelete = (id: string) => {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
@@ -63,7 +59,7 @@ export class BatchComponent implements OnInit, AfterViewInit {
       if (result) {
         this.batchService.delete(id)
           .subscribe(
-            success => { this.onSuccess(success) },
+            success => { this.onSuccess(id, true) },
             fail => { this.onError(fail) }
           );
       }
@@ -95,18 +91,24 @@ export class BatchComponent implements OnInit, AfterViewInit {
 
       this.batchService.create(file)
         .subscribe(
-          success => { this.onSuccess(success) },
+          success => { this.onSuccess(success, false) },
           fail => { this.onError(fail) }
         );
     }
     reader.readAsDataURL(batch);
   }
 
-  private onSuccess(success: any) {
-    this.getAll();
+  private onSuccess(response: any, remove: boolean) {
+    if (remove) {
+      let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
+      this.dataSource.data.splice(index, 1);
+      this.dataSource._updateChangeSubscription();
+    } else {
+      this.getAll();
+    }
   }
 
-  private onError(fail: any) {
-    this.snackBarService.openError(fail);
+  private onError(response: any) {
+    this.snackBarService.openError(response);
   }
 }

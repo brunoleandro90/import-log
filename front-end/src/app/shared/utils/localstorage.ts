@@ -1,18 +1,10 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class LocalStorageService {
-
-  constructor() { }
-
-  setLoggedUser(data: any) {
+export class LocalStorageUtils {
+  setLoggedUser(response: any) {
     localStorage.setItem('importlog.isLoggedin', 'true');
     let dateNow: Date = new Date();
-    dateNow.setSeconds(dateNow.getSeconds() + data.expiresIn);
+    dateNow.setSeconds(dateNow.getSeconds() + response.expiresIn);
     localStorage.setItem('importlog.expiresIn', dateNow.toString());
-    localStorage.setItem('importlog.token', data.accessToken);
+    localStorage.setItem('importlog.token', response.accessToken);
   }
 
   logOff() {

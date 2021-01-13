@@ -8,6 +8,7 @@ import { MaterialModule } from '../shared/modules/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewAccountComponent } from './new-account/new-account.component';
 import { SnackBarService } from '../shared/services/snack-bar.service';
+import { AuthService } from '../shared/services/auth.service';
 
 
 @NgModule({
@@ -19,6 +20,6 @@ import { SnackBarService } from '../shared/services/snack-bar.service';
     FlexLayoutModule.withConfig({ addFlexToParent: false })
   ],
   declarations: [LoginComponent, NewAccountComponent],
-  providers: [SnackBarService]
+  providers: [AuthService, SnackBarService]
 })
 export class LoginModule { }

@@ -1,33 +1,48 @@
 <div class="login-page">
   <div class="content">
-      <form [formGroup]="loginForm" class="login-form" fxFlex  >
-          <div class="text-center">
-              <h2 class="app-name">Importação de log</h2>
-          </div>
-          <div fxFlex fxlayout="row" fxlayout.lt-md="column">
-              <div fxFlexFill>
-                  <mat-form-field class="w-100">
-                      <input formControlName="email" matInput placeholder="E-mail">
-                  </mat-form-field>
-              </div>
-          </div>
-          <div fxFlex fxLayout="row" fxLayout.lt-md="column">
-              <div fxFlexFill>
-                  <mat-form-field class="w-100">
-                      <input formControlName="password" matInput type="password" placeholder="Senha">
-                  </mat-form-field>
-              </div>
-          </div>
-          <div fxFlex fxLayout="row" fxLayout.lt-md="column">
-              <div fxFlexFill>
-                  <button mat-raised-button color="primary" [disabled]="wait" class="w-100" (click)="onLogin()">Login</button>
-              </div>
-          </div>
-          <div fxFlex fxLayout="row" fxLayout.lt-md="column" style="margin: 20px 0 30px 0">
-            <div fxFlex  fxLayoutAlign="end">
-                <a [routerLink]="" (click)="onNewAccount()">Criar nova conta</a>
-            </div>
+    <form novalidate (ngSubmit)="onLogin()" [formGroup]="usuarioForm" class="login-form" fxFlex>
+      <div class="text-center">
+        <h2 class="app-name">Importação de log</h2>
+      </div>
+      <div class="alert alert-danger" *ngIf="errors.length > 0">
+        <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+        <ul>
+          <li *ngFor="let error of errors">{{ error }}</li>
+        </ul>
+      </div>
+
+      <div fxFlex fxlayout="row" fxlayout.lt-md="column">
+        <div fxFlexFill>
+          <mat-form-field class="w-100">
+            <input formControlName="email" matInput placeholder="E-mail">
+            <mat-error class="text-danger" *ngIf="displayMessage.email">
+              <span [innerHTML]="displayMessage.email"></span>
+            </mat-error>
+          </mat-form-field>
         </div>
-      </form>
+      </div>
+      <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlexFill>
+          <mat-form-field class="w-100">
+            <input formControlName="password" matInput type="password" placeholder="Senha">
+            <mat-error class="text-danger" *ngIf="displayMessage.password">
+              <span [innerHTML]="displayMessage.password"></span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlexFill>
+          <p>
+            <button mat-raised-button color="primary" class="w-100" (click)="onLogin()">Login</button>
+          </p>
+        </div>
+      </div>
+      <div fxFlex fxLayout="row" fxLayout.lt-md="column" style="margin: 20px 0 30px 0">
+        <div fxFlex fxLayoutAlign="end">
+          <a [routerLink]="" (click)="onNewAccount()">Criar nova conta</a>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

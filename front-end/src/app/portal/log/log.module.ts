@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { AddComponent } from './add/add.component';
 import { EditComponent } from './edit/edit.component';
+import { LogService } from 'src/app/shared/services/log.service';
 
 @NgModule({
   declarations: [LogComponent, AddComponent, EditComponent],
@@ -18,6 +19,6 @@ import { EditComponent } from './edit/edit.component';
     ReactiveFormsModule,
     FlexLayoutModule.withConfig({ addFlexToParent: false })
   ],
-  providers: [SnackBarService]
+  providers: [LogService, SnackBarService]
 })
 export class LogModule { }

@@ -1,45 +1,74 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { Login } from '../shared/models/login';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CustomValidators } from 'ngx-custom-validators';
+import { FormBaseComponent } from '../shared/base-components/form-base.component';
+import { Usuario } from '../shared/models/usuario';
 import { AuthService } from '../shared/services/auth.service';
-import { LocalStorageService } from '../shared/services/local-storage.service';
 import { SnackBarService } from '../shared/services/snack-bar.service';
 import { NewAccountComponent } from './new-account/new-account.component';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-usuario',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent extends FormBaseComponent implements OnInit {
 
-  loginForm: FormGroup;
-  login: Login = new Login();
-  wait: boolean = false;
+  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
-  constructor(private router: Router,
-    public fb: FormBuilder,
+  errors: any[] = [];
+  usuarioForm!: FormGroup;
+  usuario!: Usuario;
+  returnUrl: string;
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
     public dialog: MatDialog,
     private snackBarService: SnackBarService,
-    private authService: AuthService,
-    private localStorageService: LocalStorageService) {
-    this.loginForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+    private authService: AuthService) {
+
+    super();
+
+    this.validationMessages = {
+      email: {
+        required: 'Informe o e-mail',
+        email: 'E-mail inválido'
+      },
+      password: {
+        required: 'Informe a senha',
+        rangeLength: 'A senha deve possuir entre 6 e 15 caracteres'
+      }
+    };
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
+    super.configurarMensagensValidacaoBase(this.validationMessages);
+  }
+
+  ngOnInit(): void {
+
+    this.usuarioForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, CustomValidators.rangeLength([6, 15])]]
     });
   }
 
-  onLogin() {
-    if (this.loginForm.dirty && this.loginForm.valid) {
-      this.wait = true;
-      this.login = Object.assign({}, this.login, this.loginForm.value);
+  ngAfterViewInit(): void {
+    super.configurarValidacaoFormularioBase(this.formInputElements, this.usuarioForm);
+  }
 
-      this.authService.login(this.login)
+  onLogin() {
+    if (this.usuarioForm.dirty && this.usuarioForm.valid) {
+      this.usuario = Object.assign({}, this.usuario, this.usuarioForm.value);
+
+      this.authService.login(this.usuario)
         .subscribe(
-          success => { this.onSuccess(success) },
-          fail => { this.onError(fail) }
+          sucesso => { this.onSuccess(sucesso) },
+          falha => { this.onError(falha) }
         );
     }
   }
@@ -49,7 +78,6 @@ export class LoginComponent {
       maxWidth: '75vw',
       maxHeight: '75vh',
       width: '750px',
-      height: '60vh',
       disableClose: true
     };
     const dialogRef = this.dialog.open(NewAccountComponent, config);
@@ -59,16 +87,19 @@ export class LoginComponent {
     });
   }
 
-  private onSuccess(success: any) {
-    this.loginForm.reset();
+  private onSuccess(response: any) {
+    this.usuarioForm.reset();
+    this.errors = [];
 
-    this.localStorageService.setLoggedUser(success.data)
+    this.authService.LocalStorage.setLoggedUser(response);
+
+    this.snackBarService.open('Login realizado com sucesso!', 'Ok');
 
     this.router.navigate(['/batch']);
   }
 
-  private onError(fail: any) {
-    this.wait = false;
-    this.snackBarService.openError(fail);
+  private onError(response: any) {
+    this.errors = response.error.errors;
+    this.snackBarService.open('Ocorreu um erro! :(', 'Ok');
   }
 }

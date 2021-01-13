@@ -1,18 +1,35 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { catchError, map } from 'rxjs/operators';
 import { Batch } from '../models/batch';
-import { GenericService } from './generic.service';
-import { LocalStorageService } from './local-storage.service';
+import { BaseService } from './base.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class BatchService extends GenericService<Batch>{
+@Injectable()
+export class BatchService extends BaseService {
 
-  constructor(public http: HttpClient,
-    public localStorageService: LocalStorageService) {
-    super(http, localStorageService, 'batch')
+  constructor(public http: HttpClient) { super() }
+
+  getAll(): Observable<Batch[]> {
+    return this.http
+      .get<Batch[]>(this.UrlServiceV1 + "batch", this.generateAuthHeaderJson())
+      .pipe(catchError(super.serviceError));
   }
+
+  create(batch: Batch): Observable<Batch> {
+    return this.http
+      .post(this.UrlServiceV1 + "batch", batch, this.generateAuthHeaderJson())
+      .pipe(
+        map(super.extractData),
+        catchError(super.serviceError));
+  }
+
+  delete(id: string): Observable<Batch> {
+    return this.http
+      .delete(this.UrlServiceV1 + "batch/" + id, super.generateAuthHeaderJson())
+      .pipe(
+        map(super.extractData),
+        catchError(super.serviceError));
+  }
+
 }

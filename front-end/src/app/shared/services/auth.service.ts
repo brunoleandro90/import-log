@@ -1,27 +1,32 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { Login } from '../models/login';
-import { NewUser } from '../models/new-user';
+import { Usuario } from '../models/usuario';
+import { BaseService } from './base.service';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthService {
+@Injectable()
+export class AuthService extends BaseService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { super(); }
 
-  public create = (newUser: NewUser) => {
-    return this.http.post(`${environment.urlAddress}/new-account`, newUser, this.generateHeaders());
+  create(usuario: Usuario): Observable<Usuario> {
+    let response = this.http
+      .post(this.UrlServiceV1 + 'new-account', usuario, this.generateHeaderJson())
+      .pipe(
+        map(this.extractData),
+        catchError(this.serviceError));
+
+    return response;
   }
 
-  public login = (login: Login) => {
-    return this.http.post(`${environment.urlAddress}/login`, login, this.generateHeaders());
-  }
+  login(usuario: Usuario): Observable<Usuario> {
+    let response = this.http
+      .post(this.UrlServiceV1 + 'login', usuario, this.generateHeaderJson())
+      .pipe(
+        map(this.extractData),
+        catchError(this.serviceError));
 
-  protected generateHeaders = () => {
-    return {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    }
+    return response;
   }
 }

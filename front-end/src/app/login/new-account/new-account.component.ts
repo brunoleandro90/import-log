@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { NewUser } from 'src/app/shared/models/new-user';
+import { CustomValidators } from 'ngx-custom-validators';
+import { FormBaseComponent } from 'src/app/shared/base-components/form-base.component';
+import { Usuario } from 'src/app/shared/models/usuario';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 
 @Component({
@@ -12,36 +13,68 @@ import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
   templateUrl: './new-account.component.html',
   styleUrls: ['./new-account.component.scss']
 })
-export class NewAccountComponent {
-  newAccountForm: FormGroup;
-  newUser: NewUser = new NewUser();
-  wait: boolean = false;
+export class NewAccountComponent extends FormBaseComponent implements OnInit, AfterViewInit {
+  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
+
+  errors: any[] = [];
+  newAccountForm!: FormGroup;
+  usuario!: Usuario;
 
   constructor(private router: Router,
     public fb: FormBuilder,
     private snackBarService: SnackBarService,
     private authService: AuthService,
-    private localStorageService: LocalStorageService,
     public dialogRef: MatDialogRef<NewAccountComponent>
   ) {
+
+    super();
+
+    this.validationMessages = {
+      email: {
+        required: 'Informe o e-mail',
+        email: 'E-mail inválido'
+      },
+      password: {
+        required: 'Informe a senha',
+        rangeLength: 'A senha deve possuir entre 6 e 15 caracteres'
+      },
+      confirmPassword: {
+        required: 'Informe a senha novamente',
+        rangeLength: 'A senha deve possuir entre 6 e 15 caracteres',
+        equalTo: 'As senhas não conferem'
+      }
+    };
+
+    super.configurarMensagensValidacaoBase(this.validationMessages);
+  }
+
+  ngOnInit(): void {
+
+    let senha = new FormControl('', [Validators.required, CustomValidators.rangeLength([6, 15])]);
+    let senhaConfirm = new FormControl('', [Validators.required, CustomValidators.rangeLength([6, 15]), CustomValidators.equalTo(senha)]);
+
     this.newAccountForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: senha,
+      confirmPassword: senhaConfirm
     });
+  }
+
+  ngAfterViewInit(): void {
+    super.configurarValidacaoFormularioBase(this.formInputElements, this.newAccountForm);
   }
 
   onSave() {
     if (this.newAccountForm.dirty && this.newAccountForm.valid) {
-      this.wait = true;
+      this.usuario = Object.assign({}, this.usuario, this.newAccountForm.value);
 
-      this.newUser = Object.assign({}, this.newUser, this.newAccountForm.value);
-
-      this.authService.create(this.newUser)
+      this.authService.create(this.usuario)
         .subscribe(
-          success => { this.onSuccess(success) },
-          fail => { this.onError(fail) }
+          sucesso => { this.onSuccess(sucesso) },
+          falha => { this.onError(falha) }
         );
+
+      this.mudancasNaoSalvas = false;
     }
   }
 
@@ -49,19 +82,21 @@ export class NewAccountComponent {
     this.dialogRef.close();
   }
 
-  private onSuccess(success: any) {
+  private onSuccess(response: any) {
     this.newAccountForm.reset();
+    this.errors = [];
 
-    this.localStorageService.setLoggedUser(success.data);
+    this.authService.LocalStorage.setLoggedUser(response);
 
     this.onClose();
+
+    this.snackBarService.open('Registro realizado com Sucesso!', 'Ok');
 
     this.router.navigate(['/batch']);
   }
 
-  private onError(fail: any) {
-    this.wait = false;
-    this.snackBarService.openError(fail);
+  private onError(response: any) {
+    this.errors = response.error.errors;
+    this.snackBarService.open('Ocorreu um erro! :(', 'Ok');
   }
-
 }

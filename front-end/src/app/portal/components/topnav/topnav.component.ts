@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
+import { LocalStorageUtils } from 'src/app/shared/utils/localstorage';
 
 @Component({
   selector: 'app-topnav',
@@ -9,9 +9,9 @@ import { LocalStorageService } from 'src/app/shared/services/local-storage.servi
 })
 export class TopnavComponent {
   public pushRightClass: string = 'push-right';
+  localStorageUtils = new LocalStorageUtils();
 
-  constructor(public router: Router,
-    private localStorageService: LocalStorageService) {
+  constructor(public router: Router) {
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
         this.toggleSidebar();
@@ -30,7 +30,7 @@ export class TopnavComponent {
   }
 
   onLoggedout() {
-    this.localStorageService.logOff();
+    this.localStorageUtils.logOff();
     this.router.navigate(['/login']);
   }
 }
