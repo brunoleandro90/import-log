@@ -6,14 +6,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Batch } from 'src/app/shared/models/batch';
 import { BatchService } from 'src/app/shared/services/batch.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-batch',
-  templateUrl: './batch.component.html',
-  styleUrls: ['./batch.component.scss']
+  selector: 'app-list',
+  templateUrl: './list.component.html'
 })
-export class BatchComponent implements OnInit, AfterViewInit {
+export class ListComponent implements OnInit, AfterViewInit {
 
   batch: Batch = new Batch();
 
@@ -59,7 +58,7 @@ export class BatchComponent implements OnInit, AfterViewInit {
       if (result) {
         this.batchService.delete(id)
           .subscribe(
-            success => { this.onSuccess(id, true) },
+            success => { this.onDeleteSuccess(id) },
             fail => { this.onError(fail) }
           );
       }
@@ -91,21 +90,24 @@ export class BatchComponent implements OnInit, AfterViewInit {
 
       this.batchService.create(file)
         .subscribe(
-          success => { this.onSuccess(success, false) },
+          success => { this.onAddSuccess(success) },
           fail => { this.onError(fail) }
         );
     }
     reader.readAsDataURL(batch);
   }
 
-  private onSuccess(response: any, remove: boolean) {
-    if (remove) {
-      let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
-      this.dataSource.data.splice(index, 1);
-      this.dataSource._updateChangeSubscription();
-    } else {
-      this.getAll();
-    }
+  private onDeleteSuccess(response: any) {
+    let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
+    this.dataSource.data.splice(index, 1);
+    this.dataSource._updateChangeSubscription();
+    this.snackBarService.open('Batch excluído com sucesso! :)', 'Ok');
+  }
+
+  private onAddSuccess(response: any) {
+    this.dataSource.data.push(response);
+    this.dataSource._updateChangeSubscription();
+    this.snackBarService.open('Batch criado com sucesso! :)', 'Ok');
   }
 
   private onError(response: any) {

@@ -3,20 +3,18 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { config } from 'rxjs';
 import { Log } from 'src/app/shared/models/log';
 import { LogService } from 'src/app/shared/services/log.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { AddComponent } from './add/add.component';
-import { EditComponent } from './edit/edit.component';
+import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
+import { AddComponent } from '../add/add.component';
+import { EditComponent } from '../edit/edit.component';
 
 @Component({
-  selector: 'app-log',
-  templateUrl: './log.component.html',
-  styleUrls: ['./log.component.scss']
+  selector: 'app-list',
+  templateUrl: './list.component.html'
 })
-export class LogComponent implements OnInit, AfterViewInit {
+export class ListComponent implements OnInit, AfterViewInit {
 
   public displayedColumns = ['ip', 'date', 'method ', 'url', 'httpStatus', 'update', 'delete'];
 
@@ -51,40 +49,20 @@ export class LogComponent implements OnInit, AfterViewInit {
   }
 
   onAdd() {
-    const dialogRef = this.dialog.open(AddComponent, {
+    this.dialog.open(AddComponent, {
       disableClose: true
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let logObj: Log = Object.assign(result);
-        this.logService.create(logObj)
-          .subscribe(
-            success => { this.onSuccess(success, false) },
-            fail => { this.onError(fail) }
-          );
-      }
     });
   }
 
   onUpdate = (id: string) => {
-    let logEdit!: Log;
     this.logService.getById(id)
       .subscribe(res => {
-        logEdit = res as Log;
-        const dialogRef = this.dialog.open(EditComponent, {
+
+        let logEdit: Log = res as Log;
+
+        this.dialog.open(EditComponent, {
           disableClose: true,
           data: logEdit
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            let logObj: Log = Object.assign(result);
-            logObj.id = logEdit.id;
-            this.logService.update(logObj)
-              .subscribe(
-                success => { this.onSuccess(id, false) },
-                fail => { this.onError(fail) }
-              );
-          }
         });
       });
   }
@@ -98,21 +76,18 @@ export class LogComponent implements OnInit, AfterViewInit {
       if (result) {
         this.logService.delete(id)
           .subscribe(
-            success => { this.onSuccess(success, true) },
+            success => { this.onSuccess(success) },
             fail => { this.onError(fail) }
           );
       }
     });
   }
 
-  private onSuccess(response: any, remove: boolean) {
-    if (remove) {
-      let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
-      this.dataSource.data.splice(index, 1);
-      this.dataSource._updateChangeSubscription();
-    } else {
-      this.getAll();
-    }
+  private onSuccess(response: any) {
+    let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
+    this.dataSource.data.splice(index, 1);
+    this.dataSource._updateChangeSubscription();
+    this.snackBarService.open('Log excluído com sucesso! :)', 'Ok');
   }
 
   private onError(fail: any) {

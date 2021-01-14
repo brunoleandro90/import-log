@@ -3,11 +3,11 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidators } from 'ngx-custom-validators';
-import { FormBaseComponent } from '../shared/base-components/form-base.component';
-import { Usuario } from '../shared/models/usuario';
-import { AuthService } from '../shared/services/auth.service';
-import { SnackBarService } from '../shared/services/snack-bar.service';
-import { NewAccountComponent } from './new-account/new-account.component';
+import { FormBaseComponent } from '../../shared/base-components/form-base.component';
+import { Usuario } from '../../shared/models/usuario';
+import { AuthService } from '../../shared/services/auth.service';
+import { SnackBarService } from '../../shared/services/snack-bar.service';
+import { NewComponent } from '../new/new.component';
 
 @Component({
   selector: 'app-usuario',
@@ -73,14 +73,14 @@ export class LoginComponent extends FormBaseComponent implements OnInit {
     }
   }
 
-  onNewAccount() {
+  onNew() {
     let config: MatDialogConfig = {
       maxWidth: '75vw',
       maxHeight: '75vh',
       width: '750px',
       disableClose: true
     };
-    const dialogRef = this.dialog.open(NewAccountComponent, config);
+    const dialogRef = this.dialog.open(NewComponent, config);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

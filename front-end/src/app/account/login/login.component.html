@@ -13,7 +13,7 @@
 
       <div fxFlex fxlayout="row" fxlayout.lt-md="column">
         <div fxFlexFill>
-          <mat-form-field class="w-100">
+          <mat-form-field class="w100">
             <input formControlName="email" matInput placeholder="E-mail">
             <mat-error class="text-danger" *ngIf="displayMessage.email">
               <span [innerHTML]="displayMessage.email"></span>
@@ -23,7 +23,7 @@
       </div>
       <div fxFlex fxLayout="row" fxLayout.lt-md="column">
         <div fxFlexFill>
-          <mat-form-field class="w-100">
+          <mat-form-field class="w100">
             <input formControlName="password" matInput type="password" placeholder="Senha">
             <mat-error class="text-danger" *ngIf="displayMessage.password">
               <span [innerHTML]="displayMessage.password"></span>
@@ -34,13 +34,13 @@
       <div fxFlex fxLayout="row" fxLayout.lt-md="column">
         <div fxFlexFill>
           <p>
-            <button mat-raised-button color="primary" class="w-100" (click)="onLogin()">Login</button>
+            <button mat-raised-button color="primary" class="w100" (click)="onLogin()">Login</button>
           </p>
         </div>
       </div>
       <div fxFlex fxLayout="row" fxLayout.lt-md="column" style="margin: 20px 0 30px 0">
         <div fxFlex fxLayoutAlign="end">
-          <a [routerLink]="" (click)="onNewAccount()">Criar nova conta</a>
+          <a [routerLink]="" (click)="onNew()">Criar nova conta</a>
         </div>
       </div>
     </form>

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LogComponent } from './log.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BatchRoutingModule } from './log-routing.module';
 import { MaterialModule } from 'src/app/shared/modules/material.module';
@@ -9,9 +8,10 @@ import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { AddComponent } from './add/add.component';
 import { EditComponent } from './edit/edit.component';
 import { LogService } from 'src/app/shared/services/log.service';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
-  declarations: [LogComponent, AddComponent, EditComponent],
+  declarations: [AddComponent, EditComponent, ListComponent],
   imports: [
     CommonModule,
     BatchRoutingModule,

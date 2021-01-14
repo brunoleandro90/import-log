@@ -9,7 +9,7 @@
       </div>
       <div fxFlex fxlayout="row" fxlayout.lt-md="column">
         <div fxFlexFill>
-          <mat-form-field class="w-100">
+          <mat-form-field class="w100">
             <input formControlName="email" matInput placeholder="E-mail">
             <mat-error class="text-danger" *ngIf="displayMessage.email">
               <span [innerHTML]="displayMessage.email"></span>
@@ -19,7 +19,7 @@
       </div>
       <div fxFlex fxLayout="row" fxLayout.lt-md="column">
         <div fxFlexFill>
-          <mat-form-field class="w-100">
+          <mat-form-field class="w100">
             <input formControlName="password" matInput type="password" placeholder="Senha">
             <mat-error class="text-danger" *ngIf="displayMessage.password">
               <span [innerHTML]="displayMessage.password"></span>
@@ -29,7 +29,7 @@
       </div>
       <div fxFlex fxLayout="row" fxLayout.lt-md="column">
         <div fxFlexFill>
-          <mat-form-field class="w-100">
+          <mat-form-field class="w100">
             <input formControlName="confirmPassword" matInput type="password" placeholder="Confirme a senha">
             <mat-error class="text-danger" *ngIf="displayMessage.confirmPassword">
               <span [innerHTML]="displayMessage.confirmPassword"></span>

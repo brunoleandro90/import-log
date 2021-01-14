@@ -9,11 +9,10 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 
 @Component({
-  selector: 'app-new-account',
-  templateUrl: './new-account.component.html',
-  styleUrls: ['./new-account.component.scss']
+  selector: 'app-new',
+  templateUrl: './new.component.html'
 })
-export class NewAccountComponent extends FormBaseComponent implements OnInit, AfterViewInit {
+export class NewComponent extends FormBaseComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   errors: any[] = [];
@@ -24,7 +23,7 @@ export class NewAccountComponent extends FormBaseComponent implements OnInit, Af
     public fb: FormBuilder,
     private snackBarService: SnackBarService,
     private authService: AuthService,
-    public dialogRef: MatDialogRef<NewAccountComponent>
+    public dialogRef: MatDialogRef<NewComponent>
   ) {
 
     super();

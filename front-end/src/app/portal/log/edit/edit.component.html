@@ -1,17 +1,32 @@
 <div mat-dialog-content>
-  Adicionar log
+  Editar log
 </div>
-<form [formGroup]="editForm" fxFlex>
+<form (ngSubmit)="onConfirm()" [formGroup]="logForm" fxFlex>
+  <div class="alert alert-danger" *ngIf="errors.length > 0">
+    <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+    <ul>
+      <li *ngFor="let error of errors">{{ error }}</li>
+    </ul>
+  </div>
   <div fxLayout="row" fxLayoutAlign="space-between stretch">
     <div fxFlexFill>
       <mat-form-field class="pl5">
         <input formControlName="ip" matInput placeholder="IP">
+        <mat-error class="text-danger" *ngIf="displayMessage.ip">
+          <span [innerHTML]="displayMessage.ip"></span>
+        </mat-error >
       </mat-form-field>
       <mat-form-field class="pl5 pr5">
         <input formControlName="date" matInput placeholder="Data e hora">
+        <mat-error class="text-danger" *ngIf="displayMessage.date">
+          <span [innerHTML]="displayMessage.date"></span>
+        </mat-error >
       </mat-form-field>
       <mat-form-field class="pr5">
         <input formControlName="method" matInput placeholder="Método">
+        <mat-error class="text-danger" *ngIf="displayMessage.method">
+          <span [innerHTML]="displayMessage.method"></span>
+        </mat-error >
       </mat-form-field>
     </div>
   </div>
@@ -20,6 +35,9 @@
     <div fxFlexFill>
       <mat-form-field class="pl5 pr5 w100">
         <input formControlName="url" matInput placeholder="URL">
+        <mat-error class="text-danger" *ngIf="displayMessage.url">
+          <span [innerHTML]="displayMessage.url"></span>
+        </mat-error >
       </mat-form-field>
     </div>
   </div>
@@ -28,12 +46,21 @@
     <div fxFlexFill>
       <mat-form-field class="pl5">
         <input formControlName="httpVersion" matInput placeholder="HTTP Version">
+        <mat-error class="text-danger" *ngIf="displayMessage.httpVersion">
+          <span [innerHTML]="displayMessage.httpVersion"></span>
+        </mat-error >
       </mat-form-field>
       <mat-form-field class="pl5 pr5">
         <input formControlName="httpStatus" matInput placeholder="HTTP Status">
+        <mat-error class="text-danger" *ngIf="displayMessage.httpStatus">
+          <span [innerHTML]="displayMessage.httpStatus"></span>
+        </mat-error >
       </mat-form-field>
       <mat-form-field class="pr5">
         <input formControlName="length" matInput placeholder="Length">
+        <mat-error class="text-danger" *ngIf="displayMessage.length">
+          <span [innerHTML]="displayMessage.length"></span>
+        </mat-error >
       </mat-form-field>
     </div>
   </div>
@@ -42,6 +69,9 @@
     <div fxFlexFill>
       <mat-form-field class="pl5 pr5 w100">
         <input formControlName="referer" matInput placeholder="Referer">
+        <mat-error class="text-danger" *ngIf="displayMessage.referer">
+          <span [innerHTML]="displayMessage.referer"></span>
+        </mat-error >
       </mat-form-field>
     </div>
   </div>
@@ -49,11 +79,14 @@
     <div fxFlexFill>
       <mat-form-field class="pl5 pr5 w100">
         <input formControlName="userAgent" matInput placeholder="User-agent">
+        <mat-error class="text-danger" *ngIf="displayMessage.userAgent">
+          <span [innerHTML]="displayMessage.userAgent"></span>
+        </mat-error >
       </mat-form-field>
     </div>
   </div>
 </form>
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button class="mat-raised-button mat-primary" (click)="onConfirm()" [disabled]="wait">Confirmar</button>
+  <button class="mat-raised-button mat-primary" (click)="onConfirm()">Confirmar</button>
 </div>
