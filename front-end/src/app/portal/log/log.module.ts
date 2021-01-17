@@ -9,6 +9,7 @@ import { AddComponent } from './add/add.component';
 import { EditComponent } from './edit/edit.component';
 import { LogService } from 'src/app/shared/services/log.service';
 import { ListComponent } from './list/list.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [AddComponent, EditComponent, ListComponent],
@@ -19,6 +20,13 @@ import { ListComponent } from './list/list.component';
     ReactiveFormsModule,
     FlexLayoutModule.withConfig({ addFlexToParent: false })
   ],
-  providers: [LogService, SnackBarService]
+  providers: [
+    LogService,
+    SnackBarService,
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'pt-BR'
+    }
+  ]
 })
 export class LogModule { }

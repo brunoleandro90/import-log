@@ -12,7 +12,16 @@ import { LogBaseComponent } from '../log-form.base.component';
   templateUrl: './add.component.html'
 })
 export class AddComponent extends LogBaseComponent implements OnInit {
+
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
+
+  methods: any[] = [
+    { value: 'GET' },
+    { value: 'POST' },
+    { value: 'PUT' },
+    { value: 'DELETE' },
+    { value: 'PATCH' }
+  ];
 
   constructor(
     private fb: FormBuilder,

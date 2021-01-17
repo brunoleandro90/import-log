@@ -1,6 +1,6 @@
 <div class="login-page">
   <div class="content">
-    <form novalidate (ngSubmit)="onLogin()" [formGroup]="usuarioForm" class="login-form" fxFlex>
+    <form novalidate (ngSubmit)="onLogin()" [formGroup]="loginForm" class="login-form" fxFlex>
       <div class="text-center">
         <h2 class="app-name">Importação de log</h2>
       </div>
@@ -34,7 +34,7 @@
       <div fxFlex fxLayout="row" fxLayout.lt-md="column">
         <div fxFlexFill>
           <p>
-            <button mat-raised-button color="primary" class="w100" (click)="onLogin()">Login</button>
+            <button mat-raised-button color="primary" class="w100" [disabled]="!loginForm.valid" (click)="onLogin()">Login</button>
           </p>
         </div>
       </div>

@@ -17,13 +17,17 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="pl5 pr5">
-        <input formControlName="date" matInput placeholder="Data e hora">
+        <input formControlName="date" matInput type="datetime-local" placeholder="Data e hora">
         <mat-error class="text-danger" *ngIf="displayMessage.date">
           <span [innerHTML]="displayMessage.date"></span>
         </mat-error>
       </mat-form-field>
       <mat-form-field class="pr5">
-        <input formControlName="method" matInput placeholder="Método">
+        <mat-select formControlName="method" name="method" placeholder="Método">
+          <mat-option *ngFor="let method of methods" [value]="method.value">
+            {{method.value}}
+          </mat-option>
+        </mat-select>
         <mat-error class="text-danger" *ngIf="displayMessage.method">
           <span [innerHTML]="displayMessage.method"></span>
         </mat-error>
@@ -87,6 +91,6 @@
   </div>
 </form>
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button class="mat-raised-button mat-primary" (click)="onConfirm()">Confirmar</button>
+  <button mat-button color="warn" (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="!logForm.valid" (click)="onConfirm()">Confirmar</button>
 </div>

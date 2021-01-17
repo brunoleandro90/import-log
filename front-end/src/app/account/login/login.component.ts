@@ -19,10 +19,10 @@ export class LoginComponent extends FormBaseComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   errors: any[] = [];
-  usuarioForm!: FormGroup;
+  loginForm!: FormGroup;
   usuario!: Usuario;
   returnUrl: string;
-
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -51,19 +51,20 @@ export class LoginComponent extends FormBaseComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.usuarioForm = this.fb.group({
+    this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, CustomValidators.rangeLength([6, 15])]]
     });
   }
 
   ngAfterViewInit(): void {
-    super.configurarValidacaoFormularioBase(this.formInputElements, this.usuarioForm);
+    super.configurarValidacaoFormularioBase(this.formInputElements, this.loginForm);
   }
 
   onLogin() {
-    if (this.usuarioForm.dirty && this.usuarioForm.valid) {
-      this.usuario = Object.assign({}, this.usuario, this.usuarioForm.value);
+    if (this.loginForm.dirty && this.loginForm.valid) {
+      
+      this.usuario = Object.assign({}, this.usuario, this.loginForm.value);
 
       this.authService.login(this.usuario)
         .subscribe(
@@ -88,11 +89,11 @@ export class LoginComponent extends FormBaseComponent implements OnInit {
   }
 
   private onSuccess(response: any) {
-    this.usuarioForm.reset();
+    this.loginForm.reset();
     this.errors = [];
 
     this.authService.LocalStorage.setLoggedUser(response);
-
+    
     this.snackBarService.open('Login realizado com sucesso!', 'Ok');
 
     this.router.navigate(['/batch']);
@@ -100,6 +101,7 @@ export class LoginComponent extends FormBaseComponent implements OnInit {
 
   private onError(response: any) {
     this.errors = response.error.errors;
+
     this.snackBarService.open('Ocorreu um erro! :(', 'Ok');
   }
 }

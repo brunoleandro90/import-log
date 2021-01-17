@@ -14,19 +14,25 @@
         <input formControlName="ip" matInput placeholder="IP">
         <mat-error class="text-danger" *ngIf="displayMessage.ip">
           <span [innerHTML]="displayMessage.ip"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="pl5 pr5">
-        <input formControlName="date" matInput placeholder="Data e hora">
+        <input matInput formControlName="date" [matDatepicker]="date" placeholder="Data e hora">
+        <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+        <mat-datepicker #date></mat-datepicker>
         <mat-error class="text-danger" *ngIf="displayMessage.date">
           <span [innerHTML]="displayMessage.date"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="pr5">
-        <input formControlName="method" matInput placeholder="Método">
+        <mat-select formControlName="method" name="method" placeholder="Método">
+          <mat-option *ngFor="let method of methods" [value]="method.value">
+            {{method.value}}
+          </mat-option>
+        </mat-select>
         <mat-error class="text-danger" *ngIf="displayMessage.method">
           <span [innerHTML]="displayMessage.method"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -37,7 +43,7 @@
         <input formControlName="url" matInput placeholder="URL">
         <mat-error class="text-danger" *ngIf="displayMessage.url">
           <span [innerHTML]="displayMessage.url"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -48,19 +54,19 @@
         <input formControlName="httpVersion" matInput placeholder="HTTP Version">
         <mat-error class="text-danger" *ngIf="displayMessage.httpVersion">
           <span [innerHTML]="displayMessage.httpVersion"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="pl5 pr5">
         <input formControlName="httpStatus" matInput placeholder="HTTP Status">
         <mat-error class="text-danger" *ngIf="displayMessage.httpStatus">
           <span [innerHTML]="displayMessage.httpStatus"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="pr5">
         <input formControlName="length" matInput placeholder="Length">
         <mat-error class="text-danger" *ngIf="displayMessage.length">
           <span [innerHTML]="displayMessage.length"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -71,7 +77,7 @@
         <input formControlName="referer" matInput placeholder="Referer">
         <mat-error class="text-danger" *ngIf="displayMessage.referer">
           <span [innerHTML]="displayMessage.referer"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -81,12 +87,12 @@
         <input formControlName="userAgent" matInput placeholder="User-agent">
         <mat-error class="text-danger" *ngIf="displayMessage.userAgent">
           <span [innerHTML]="displayMessage.userAgent"></span>
-        </mat-error >
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
 </form>
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button class="mat-raised-button mat-primary" (click)="onConfirm()">Confirmar</button>
+  <button mat-button color="warn" (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="!logForm.valid" (click)="onConfirm()">Confirmar</button>
 </div>

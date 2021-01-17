@@ -39,7 +39,9 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   doFilter = (value: string) => {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
+    if (value) {
+      this.dataSource.filter = value.trim().toLocaleLowerCase();
+    }
   }
 
   getAll = () => {

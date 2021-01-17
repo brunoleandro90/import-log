@@ -14,6 +14,14 @@ import { LogBaseComponent } from '../log-form.base.component';
 export class EditComponent extends LogBaseComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
+  methods: any[] = [
+    { value: 'GET' },
+    { value: 'POST' },
+    { value: 'PUT' },
+    { value: 'DELETE' },
+    { value: 'PATCH' }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private logService: LogService,

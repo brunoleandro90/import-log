@@ -17,6 +17,9 @@ import { ListComponent } from './list/list.component';
     ReactiveFormsModule,
     FlexLayoutModule.withConfig({ addFlexToParent: false })
   ],
-  providers: [BatchService, SnackBarService]
+  providers: [
+    BatchService,
+    SnackBarService
+  ]
 })
 export class BatchModule { }
