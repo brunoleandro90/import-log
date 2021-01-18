@@ -113,6 +113,6 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   private onError(response: any) {
-    this.snackBarService.openError(response);
+    this.snackBarService.open('Ocorreu erro ao importar o batch!', 'Ok');
   }
 }

@@ -78,22 +78,22 @@ export class ListComponent implements OnInit, AfterViewInit {
       if (result) {
         this.logService.delete(id)
           .subscribe(
-            success => { this.onSuccess(success) },
-            fail => { this.onError(fail) }
+            success => { this.onSuccessDelete(success) },
+            fail => { this.onErrorDelete(fail) }
           );
       }
     });
   }
 
-  private onSuccess(response: any) {
+  private onSuccessDelete(response: any) {
     let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
     this.dataSource.data.splice(index, 1);
     this.dataSource._updateChangeSubscription();
     this.snackBarService.open('Log excluído com sucesso! :)', 'Ok');
   }
 
-  private onError(fail: any) {
-    this.snackBarService.openError(fail);
+  private onErrorDelete(fail: any) {
+    this.snackBarService.open('Ocorreu erro ao excluir o log!', 'Ok');
   }
 
 }
