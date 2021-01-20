@@ -7,9 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { BatchService } from 'src/app/shared/services/batch.service';
 import { ListComponent } from './list/list.component';
+import { UploadComponent } from './upload/upload.component';
 
 @NgModule({
-  declarations: [ListComponent],
+  declarations: [ListComponent, UploadComponent],
   imports: [
     CommonModule,
     BatchRoutingModule,

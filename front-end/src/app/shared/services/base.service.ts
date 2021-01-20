@@ -17,10 +17,27 @@ export abstract class BaseService {
     };
   }
 
+  protected generateAuthHeader() {
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.LocalStorage.getUserToken()}`
+      })
+    };
+  }
+
   protected generateAuthHeaderJson() {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.LocalStorage.getUserToken()}`
+      })
+    };
+  }
+
+  protected generateAuthHeaderFormData() {
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${this.LocalStorage.getUserToken()}`
       })
     };

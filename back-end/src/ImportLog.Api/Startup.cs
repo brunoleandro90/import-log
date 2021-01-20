@@ -51,6 +51,8 @@ namespace ImportLog.Api
 
             services.WebApiConfig();
 
+            services.FormRequestConfig();
+
             services.AddSwaggerConfig();
 
             services.ResolveDependencies();

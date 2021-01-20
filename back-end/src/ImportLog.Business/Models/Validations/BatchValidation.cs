@@ -8,6 +8,15 @@ namespace ImportLog.Business.Models.Validations
         {
             RuleFor(c => c.FileName)
                 .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
+
+            RuleFor(c => c.ContentType)
+                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
+
+            RuleFor(c => c.Length)
+                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
+
+            RuleFor(c => c.Bytes)
+                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
         }
     }
 }

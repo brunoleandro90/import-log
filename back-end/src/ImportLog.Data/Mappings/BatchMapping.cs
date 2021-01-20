@@ -14,12 +14,16 @@ namespace ImportLog.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(200)");
 
-            builder.Property(p => p.NumberLogs)
+            builder.Property(p => p.ContentType)
+                .IsRequired()
+                .HasColumnType("varchar(50)");
+            
+            builder.Property(p => p.Length)
                 .IsRequired()
                 .HasColumnType("numeric");
 
-            builder.Property(p => p.FileAsBase64)
-                .HasColumnType("varchar(5000)");
+            builder.Property(p => p.Bytes)
+                .HasColumnType("bytea");
 
             builder.ToTable("Batches");
         }

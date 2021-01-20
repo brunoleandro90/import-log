@@ -1,0 +1,9 @@
+<form [formGroup]="uploadForm">
+  <input type="file" #batchFile name="batchFile" (click)="batchFile.value = ''" (change)="onFileSelect($event)" accept=".log" style="display:none;" />
+
+  <div class="fab">
+    <button mat-fab (click)="batchFile.click()" color="primary" matTooltip="Enviar arquivo">
+      <mat-icon>cloud_upload</mat-icon>
+    </button>
+  </div>
+</form>

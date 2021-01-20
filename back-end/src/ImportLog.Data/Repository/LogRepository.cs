@@ -15,7 +15,11 @@ namespace ImportLog.Data.Repository
 
         public async Task RemoveByBatchId(Guid batchId)
         {
-            IEnumerable<Log> logs = DbSet.Where(x => x.BatchId == batchId);
+            IEnumerable<Log> logs = DbSet.AsNoTracking().Where(x => x.BatchId == batchId);
+            
+            foreach (Log entry in logs)
+                Db.Entry(entry).State = EntityState.Detached;
+
             DbSet.RemoveRange(logs);
             await base.SaveChanges();
         }

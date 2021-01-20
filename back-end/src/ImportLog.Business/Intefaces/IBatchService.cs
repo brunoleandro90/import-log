@@ -10,7 +10,6 @@ namespace ImportLog.Business.Intefaces
         Task<Batch> Get(Guid id);
         Task<List<Batch>> Get();
         Task Add(Batch batch);
-        Task Update(Batch batch);
         Task Remove(Guid id);
     }
 }

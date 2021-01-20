@@ -16,7 +16,7 @@ namespace ImportLog.Data.Mappings
 
             builder.Property(p => p.Date)
                 .IsRequired()
-                .HasColumnType("date");
+                .HasColumnType("timestamp with time zone");
             
             builder.Property(p => p.Method)
                 .IsRequired()

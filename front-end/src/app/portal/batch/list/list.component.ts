@@ -8,22 +8,20 @@ import { BatchService } from 'src/app/shared/services/batch.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html'
 })
 export class ListComponent implements OnInit, AfterViewInit {
 
-  batch: Batch = new Batch();
-
-  public displayedColumns = ['fileName', 'numberLogs', 'delete'];
+  public displayedColumns = ['fileName', 'length', 'download', 'delete'];
 
   public dataSource = new MatTableDataSource<Batch>();
 
   @ViewChild(MatSort) sort!: MatSort;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
 
   constructor(private batchService: BatchService,
     private snackBarService: SnackBarService,
@@ -51,6 +49,14 @@ export class ListComponent implements OnInit, AfterViewInit {
       })
   }
 
+  onDownload(batch: Batch) {
+    const linkSource = `data:${batch.contentType};base64, ${batch.bytes}`;
+    const downloadLink = document.createElement("a");
+    downloadLink.href = linkSource;
+    downloadLink.download = batch.fileName;
+    downloadLink.click();
+  }
+
   onDelete = (id: string) => {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
@@ -60,59 +66,22 @@ export class ListComponent implements OnInit, AfterViewInit {
       if (result) {
         this.batchService.delete(id)
           .subscribe(
-            success => { this.onDeleteSuccess(id) },
+            success => { this.onSuccess(id) },
             fail => { this.onError(fail) }
           );
       }
     });
   }
 
-  onFileChange(event: any) {
-    if (event.target.files && event.target.files.length > 0) {
-      for (let index = 0; index < event.target.files.length; index++) {
-        this.batch = event.target.files[index];
-      }
-      this.uploadFile();
-    }
-  }
-
-  private uploadFile(): void {
-    this.readAndUploadFile(this.batch);
-  }
-
-  private readAndUploadFile(batch: any) {
-    let file = new Batch();
-
-    file.fileName = batch.name;
-
-    let reader = new FileReader();
-
-    reader.onload = () => {
-      file.fileAsBase64 = reader.result!.toString();
-
-      this.batchService.create(file)
-        .subscribe(
-          success => { this.onAddSuccess(success) },
-          fail => { this.onError(fail) }
-        );
-    }
-    reader.readAsDataURL(batch);
-  }
-
-  private onDeleteSuccess(response: any) {
+  private onSuccess(response: any) {
     let index: number = this.dataSource.data.findIndex(d => d.id === response.id);
     this.dataSource.data.splice(index, 1);
     this.dataSource._updateChangeSubscription();
     this.snackBarService.open('Batch excluído com sucesso! :)', 'Ok');
   }
 
-  private onAddSuccess(response: any) {
-    this.dataSource.data.push(response);
-    this.dataSource._updateChangeSubscription();
-    this.snackBarService.open('Batch criado com sucesso! :)', 'Ok');
-  }
-
   private onError(response: any) {
-    this.snackBarService.open('Ocorreu erro ao importar o batch!', 'Ok');
+    console.log(response);
+    this.snackBarService.open('Ocorreu erro ao excluir o batch!', 'Ok');
   }
 }

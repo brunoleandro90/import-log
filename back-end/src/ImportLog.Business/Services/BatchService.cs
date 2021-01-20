@@ -39,21 +39,14 @@ namespace ImportLog.Business.Services
             if (!ExecuteValidation(new BatchValidation(), batch))
                 return;
 
-            if (batch.FileAsBase64.Contains(","))
-            {
-                batch.FileAsBase64 = batch.FileAsBase64.Substring(batch.FileAsBase64.IndexOf(",") + 1);
-            }
-            byte[] fileAsByteArray = Convert.FromBase64String(batch.FileAsBase64);
-            batch.FileAsBase64 = null;
             await _batchRepository.Add(batch);
 
-            batch.NumberLogs = await ReadFileAsBase64(fileAsByteArray, batch.Id);
-            await Update(batch);
+            await ReadLinesFromFile(batch);
         }
 
-        private async Task<int> ReadFileAsBase64(byte[] bytes, Guid batchId)
+        private async Task ReadLinesFromFile(Batch batch)
         {
-            using (Stream stream = new MemoryStream(bytes))
+            using (Stream stream = new MemoryStream(batch.Bytes))
             {
                 using (StreamReader sr = new StreamReader(stream))
                 {
@@ -64,12 +57,11 @@ namespace ImportLog.Business.Services
                         log = ConvertLineToLog(sr.ReadLine());
                         if (log != null)
                         {
-                            log.BatchId = batchId;
+                            log.BatchId = batch.Id;
                             logs.Add(log);
                         }
                     }
                     await _logService.Add(logs);
-                    return logs.Count();
                 }
             }
         }
@@ -95,14 +87,6 @@ namespace ImportLog.Business.Services
                 Referer = parts[9] == "-" ? "" : parts[9],
                 UserAgent = parts[10]
             };
-        }
-
-        public async Task Update(Batch batch)
-        {
-            if (!ExecuteValidation(new BatchValidation(), batch))
-                return;
-            await _batchRepository.DetachLocal(l => l.Id == batch.Id);
-            await _batchRepository.Update(batch);
         }
 
         public async Task Remove(Guid id)

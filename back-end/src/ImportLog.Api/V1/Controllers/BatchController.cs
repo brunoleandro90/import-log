@@ -4,9 +4,12 @@ using ImportLog.Api.ViewModels;
 using ImportLog.Business.Intefaces;
 using ImportLog.Business.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ImportLog.Api.V1.Controllers
@@ -31,7 +34,9 @@ namespace ImportLog.Api.V1.Controllers
         [HttpGet]
         public async Task<IEnumerable<BatchViewModel>> Get()
         {
-            return _mapper.Map<IEnumerable<BatchViewModel>>(await _batchService.Get());
+            //return _mapper.Map<IEnumerable<BatchViewModel>>(await _batchService.Get());
+            var ssss = _mapper.Map<IEnumerable<BatchViewModel>>(await _batchService.Get()); ;
+            return ssss;
         }
 
         [HttpGet("{id:guid}")]
@@ -44,37 +49,35 @@ namespace ImportLog.Api.V1.Controllers
             return batchViewModel;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<BatchViewModel>> Add(BatchViewModel batchViewModel)
+        [HttpPost, DisableRequestSizeLimit]
+        public async Task<ActionResult<BatchViewModel>> Upload()
         {
+            BatchViewModel batchViewModel = new BatchViewModel();
+
+            IFormCollection formCollection = await Request.ReadFormAsync();
+            IFormFile file = formCollection.Files.First();
+
+            if (file.Length > 0)
+            {
+                batchViewModel.FileName = file.FileName;
+                batchViewModel.ContentType = file.ContentType;
+                batchViewModel.Length = file.Length;
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    batchViewModel.Bytes = ms.ToArray();
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("FileName", "Não foi possível fazer upload do arquivo.");
+            }
+
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
-
+            
             await _batchService.Add(_mapper.Map<Batch>(batchViewModel));
-
-            return CustomResponse(batchViewModel);
-        }
-
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, BatchViewModel batchViewModel)
-        {
-            if (id != batchViewModel.Id)
-            {
-                NotifyError("Os ids informados não são iguais.");
-                return CustomResponse();
-            }
-
-            BatchViewModel batchAtualizacao = await GetBatch(id);
-            if (batchAtualizacao == null)
-            {
-                NotifyError($"Não foi localizado o batch pelo id {id}.");
-                return CustomResponse();
-            }
-
-            if (!ModelState.IsValid)
-                return CustomResponse(ModelState);
-
-            await _batchService.Update(_mapper.Map<Batch>(batchViewModel));
 
             return CustomResponse(batchViewModel);
         }

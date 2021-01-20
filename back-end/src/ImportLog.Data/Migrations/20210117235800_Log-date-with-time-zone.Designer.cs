@@ -3,15 +3,17 @@ using System;
 using ImportLog.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ImportLog.Data.Migrations
 {
     [DbContext(typeof(ImportLogDbContext))]
-    partial class ImportLogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210117235800_Log-date-with-time-zone")]
+    partial class Logdatewithtimezone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,18 +27,14 @@ namespace ImportLog.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<byte[]>("Bytes")
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<string>("FileAsBase64")
+                        .HasColumnType("varchar(5000)");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<decimal>("Length")
+                    b.Property<decimal>("NumberLogs")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");

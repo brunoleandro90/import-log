@@ -16,9 +16,9 @@ export class BatchService extends BaseService {
       .pipe(catchError(super.serviceError));
   }
 
-  create(batch: Batch): Observable<Batch> {
+  create(batch: any): Observable<Batch> {
     return this.http
-      .post(this.UrlServiceV1 + "batch", batch, this.generateAuthHeaderJson())
+      .post(this.UrlServiceV1 + "batch", batch, this.generateAuthHeader())
       .pipe(
         map(super.extractData),
         catchError(super.serviceError));
