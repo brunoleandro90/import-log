@@ -17,7 +17,7 @@ namespace ImportLog.Data.Mappings
             builder.Property(p => p.Date)
                 .IsRequired()
                 .HasColumnType("timestamp with time zone");
-            
+
             builder.Property(p => p.Method)
                 .IsRequired()
                 .HasColumnType("varchar(10)");
@@ -25,7 +25,7 @@ namespace ImportLog.Data.Mappings
             builder.Property(p => p.Url)
                 .IsRequired()
                 .HasColumnType("varchar(200)");
-            
+
             builder.Property(p => p.HttpVersion)
                 .IsRequired()
                 .HasColumnType("varchar(50)");
@@ -36,7 +36,7 @@ namespace ImportLog.Data.Mappings
 
             builder.Property(p => p.Length)
                 .HasColumnType("numeric(10)");
-            
+
             builder.Property(p => p.Referer)
                 .IsRequired()
                 .HasColumnType("varchar(200)");
@@ -46,9 +46,10 @@ namespace ImportLog.Data.Mappings
                 .HasColumnType("varchar(2000)");
 
             builder.HasOne<Batch>(s => s.Batch)
-            .WithMany(g => g.Logs)
-            .HasForeignKey(s => s.BatchId)
-            .IsRequired(false);
+                .WithMany(g => g.Logs)
+                .HasForeignKey(s => s.BatchId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("Logs");
         }

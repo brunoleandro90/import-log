@@ -27,12 +27,6 @@ namespace ImportLog.Business.Services
             return await _logRepository.Get();
         }
 
-        public async Task RemoveByBatchId(Guid batchId)
-        {
-            await _logRepository.RemoveByBatchId(batchId);
-        }
-
-
         public async Task Add(Log log)
         {
             if (!ExecuteValidation(new LogValidation(), log))

@@ -13,6 +13,5 @@ namespace ImportLog.Business.Intefaces
         Task Add(List<Log> logs);
         Task Update(Log log);
         Task Remove(Guid id);
-        Task RemoveByBatchId(Guid batchId);
     }
 }

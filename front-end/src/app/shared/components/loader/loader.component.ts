@@ -8,8 +8,5 @@ import { LoaderService } from '../../services/loader.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderComponent {
-
-  isLoading: Subject<boolean> = this.loaderService.isLoading;
-
-  constructor(private loaderService: LoaderService) { }
+  constructor(public loaderService: LoaderService) { }
 }

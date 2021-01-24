@@ -45,7 +45,7 @@ namespace ImportLog.Data.Migrations
                         column: x => x.BatchId,
                         principalTable: "Batches",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -4,7 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 @Injectable()
 export class LoaderService {
 
-  isLoading = new BehaviorSubject<boolean>(false);
+  isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   
   show() {
     this.isLoading.next(true);
@@ -13,16 +13,4 @@ export class LoaderService {
   hide() {
     this.isLoading.next(false);
   }
-
-  // isLoading = new BehaviorSubject(false);
-
-  // constructor() { }
-
-  // show() {
-  //   this.isLoading.next(true);
-  // }
-
-  // hide() {
-  //   this.isLoading.next(false);
-  // }
 }

@@ -91,7 +91,6 @@ namespace ImportLog.Business.Services
 
         public async Task Remove(Guid id)
         {
-            await _logService.RemoveByBatchId(id);
             await _batchRepository.DetachLocal(l => l.Id == id);
             await _batchRepository.Remove(id);
         }
